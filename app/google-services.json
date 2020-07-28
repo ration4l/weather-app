@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "739826359534",
+    "firebase_url": "https://weather-faee7.firebaseio.com",
+    "project_id": "weather-faee7",
+    "storage_bucket": "weather-faee7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739826359534:android:922ed72b20cbf7ff2667ff",
+        "android_client_info": {
+          "package_name": "com.ration4l.nl.weather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739826359534-2o1cd8odonfg0c0q7bjrn9f6hf8afl7o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA3Atkye7dnmN6OXS7vNC6YJDRkhLty78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739826359534-2o1cd8odonfg0c0q7bjrn9f6hf8afl7o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

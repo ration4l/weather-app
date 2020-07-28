@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:text="Current Details"
+        android:textColor="#000000"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TableRow
+            android:paddingVertical="4dp">
+            <TextView
+                android:layout_weight="1"
+                android:text="Wind speed"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/tvWindSpeed"
+                android:textColor="#000000"
+                android:text="Wind speed value"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingVertical="4dp">
+            <TextView
+                android:layout_weight="1"
+                android:text="Humidity"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/tvHumidity"
+                android:textColor="#000000"
+                android:text="Humidity value"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingVertical="4dp">
+            <TextView
+                android:layout_weight="1"
+                android:text="UV Index"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/tvUVIndex"
+                android:textColor="#000000"
+                android:text="UV Index value"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingVertical="4dp">
+            <TextView
+                android:layout_weight="1"
+                android:text="Visibility"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/tvVisibility"
+                android:textColor="#000000"
+                android:text="Visibility value"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingVertical="4dp">
+            <TextView
+                android:layout_weight="1"
+                android:text="Sunrise"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/tvSunrise"
+                android:textColor="#000000"
+                android:text="Sunrise value"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingVertical="4dp">
+            <TextView
+                android:layout_weight="1"
+                android:text="Sunset"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/tvSunset"
+                android:textColor="#000000"
+                android:text="Sunset value"/>
+        </TableRow>
+
+    </TableLayout>
+</LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <group>
+        <item android:title="Home"
+            android:id="@+id/action_home"/>
+
+        <item android:title="Your locations"
+            android:id="@+id/action_location_list"/>
+
+    </group>
+    <group>
+        <item android:title="Exit"/>
+    </group>
+
+</menu>
