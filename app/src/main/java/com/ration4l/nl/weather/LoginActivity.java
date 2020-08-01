@@ -111,7 +111,6 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 v.setBackgroundColor(getColor(R.color.colorGreenDark));
                 startActivityForResult(intent, REGISTER_REQUEST_CODE);
-                finish();
             }
         });
     }
@@ -132,5 +131,12 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "onActivityResult: failed");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e(TAG, "onResume: ");
+        btnNavRegister.setBackgroundColor(getColor(R.color.colorGreen));
     }
 }
