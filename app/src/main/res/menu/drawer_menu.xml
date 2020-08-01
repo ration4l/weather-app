@@ -1,23 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    >
-    <group>
-        <item
-            android:title="Home"
-            android:icon="@drawable/ic_baseline_home_24"
-            android:id="@+id/action_home"/>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-        <item
-            android:title="Your locations"
-            android:icon="@drawable/ic_baseline_place_24"
-            android:id="@+id/action_location_list"/>
+    <group>
+
+        <item android:title="Units">
+
+            <menu>
+
+                <item
+                    android:id="@+id/action_switch_to_c"
+                    android:icon="@drawable/ic_baseline_swap_horiz_24"
+                    android:title="Use °C" />
+
+                <item
+                    android:id="@+id/action_switch_to_f"
+                    android:icon="@drawable/ic_baseline_swap_horiz_24"
+                    android:title="Use °F" />
+
+            </menu>
+
+        </item>
+
+    </group>
+
+    <group>
+
+        <item android:title="Navigation">
+
+            <menu>
+
+                <item
+                    android:id="@+id/action_home"
+                    android:icon="@drawable/ic_baseline_home_24"
+                    android:title="Home" />
+
+                <item
+                    android:id="@+id/action_location_list"
+                    android:icon="@drawable/ic_baseline_place_24"
+                    android:title="Your locations" />
+
+            </menu>
+
+        </item>
+
 
     </group>
     <group>
         <item
-            android:title="Logout"
+            android:id="@+id/action_logout"
             android:icon="@drawable/ic_baseline_exit_to_app_24"
-            android:id="@+id/action_logout"/>
+            android:title="Logout" />
     </group>
 
 </menu>

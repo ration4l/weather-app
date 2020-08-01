@@ -27,6 +27,16 @@ import java.util.List;
 public class Utils {
     private static final String TAG = "Utils";
 
+    public static String standardizeString(String input){
+        String[] array = input.split(" ");
+        array[0] = String.valueOf(array[0].charAt(0)).toUpperCase()+array[0].substring(1);
+        String result="";
+        for (int i = 0; i<array.length; i++){
+            result+=array[i]+" ";
+        }
+        return result.trim();
+    }
+
     public static String milisToDateTimeString(long milis) {
         Date date = new Date(milis * 1000);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM, HH:mm");
@@ -35,7 +45,7 @@ public class Utils {
 
     public static String milisToDateString(long milis) {
         Date date = new Date(milis * 1000);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd, MMMM");
         return simpleDateFormat.format(date);
     }
 

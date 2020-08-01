@@ -39,14 +39,14 @@ public class WeatherRepository {
         progressBarObservable = new MutableLiveData<>();
     }
 
-    public void getWeatherData(double lat, double lng){
+    public void getWeatherData(double lat, double lng, String unit){
         progressBarObservable.setValue(true);
         Map<String, String> options = new HashMap<>();
         options.put("lat", String.valueOf(lat));
         options.put("lon", String.valueOf(lng));
         options.put("exclude", "minutely");
         options.put("appid", "7468892e223c208839e513cfd2d87544");
-        options.put("units", "metric");
+        options.put("units", unit);
         Call<WeatherResponse> call = weatherAPI.getWeatherData(options);
         call.enqueue(new Callback<WeatherResponse>() {
             @Override

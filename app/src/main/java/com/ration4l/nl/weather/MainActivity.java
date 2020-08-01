@@ -7,10 +7,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private PlaceViewModel placeViewModel;
     private List<Place> currentPlaceList = new ArrayList<>();
 
+    private Latlng selectedLatlng;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -72,14 +75,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         progressBar = findViewById(R.id.progressBar);
+
         weatherViewModel = new ViewModelProvider(MainActivity.this).get(WeatherViewModel.class);
         weatherViewModel.getProgressBarObservable().observe(MainActivity.this, aBoolean -> {
-            if (aBoolean){
+            if (aBoolean) {
 
                 progressBar.setVisibility(View.VISIBLE);
             } else {
 
                 progressBar.setVisibility(View.GONE);
+            }
+        });
+        weatherViewModel.getUnitObservable().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                weatherViewModel.getWeatherData(selectedLatlng.getLat(),selectedLatlng.getLng());
             }
         });
 
@@ -114,56 +124,58 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
-        private void setupSearchview() {
-            searchView = findViewById(R.id.customSearchview);
-            searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-            PlaceAutocompleteAdapter placeAutocompleteAdapter = new PlaceAutocompleteAdapter(this, R.layout.item_place_matching_name);
-            searchAutoComplete.setAdapter(placeAutocompleteAdapter);
-            searchAutoComplete.setSelectAllOnFocus(true);
-            searchAutoComplete.setTextColor(getColor(R.color.colorPrimaryText));
-            searchAutoComplete.setHintTextColor(getColor(R.color.colorSecondaryText));
-            ImageView imgClose = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
-            imgClose.setImageDrawable(getDrawable(R.drawable.ic_baseline_clear_24));
-            searchAutoComplete.setImeOptions(EditorInfo.IME_ACTION_DONE);
-            searchAutoComplete.setInputType(EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-                String address = parent.getItemAtPosition(position).toString();
-                Latlng latlng = getLocationLatLngFromAddress(getApplicationContext(), address);
-                if (latlng != null) {
-                    weatherViewModel.getWeatherData(latlng.getLat(), latlng.getLng());
-                    searchAutoComplete.setText(parent.getItemAtPosition(position).toString());
-                    Place place = new Place(address, latlng.getLat(), latlng.getLng());
-                    boolean isDuplicated = false;
-                    for (Place p : currentPlaceList
-                    ) {
-                        if (p.getAddress().equalsIgnoreCase(place.getAddress())) {
-                            isDuplicated = true;
-                            break;
-                        }
+    private void setupSearchview() {
+        searchView = findViewById(R.id.customSearchview);
+        searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        PlaceAutocompleteAdapter placeAutocompleteAdapter = new PlaceAutocompleteAdapter(this, R.layout.item_place_matching_name);
+        searchAutoComplete.setAdapter(placeAutocompleteAdapter);
+        searchAutoComplete.setSelectAllOnFocus(true);
+        searchAutoComplete.setTextColor(getColor(R.color.colorPrimaryText));
+        searchAutoComplete.setHintTextColor(getColor(R.color.colorSecondaryText));
+        ImageView imgClose = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        imgClose.setImageDrawable(getDrawable(R.drawable.ic_baseline_clear_24));
+        searchAutoComplete.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchAutoComplete.setInputType(EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+        searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+            String address = parent.getItemAtPosition(position).toString();
+            Latlng latlng = getLocationLatLngFromAddress(getApplicationContext(), address);
+            if (latlng != null) {
+                selectedLatlng=latlng;
+                weatherViewModel.getWeatherData(latlng.getLat(), latlng.getLng());
+                searchAutoComplete.setText(parent.getItemAtPosition(position).toString());
+                Place place = new Place(address, latlng.getLat(), latlng.getLng());
+                boolean isDuplicated = false;
+                for (Place p : currentPlaceList
+                ) {
+                    if (p.getAddress().equalsIgnoreCase(place.getAddress())) {
+                        isDuplicated = true;
+                        break;
                     }
-                    if (!isDuplicated) {
-                        Snackbar.make(drawerLayout, "Add this location to your list?", 10 * 1000)
-                                .setAction("Add", v -> {
-                                    placeViewModel.insert(place);
-                                    Log.e(TAG, "onClick: Added");
-                                })
-                                .show();
-                    }
-                } else {
-                    Snackbar.make(drawerLayout, "Error, try again.", Snackbar.LENGTH_LONG).show();
                 }
-                hideKeyboard(MainActivity.this, view);
-                searchAutoComplete.clearFocus();
-            });
-        }
+                if (!isDuplicated) {
+                    Snackbar.make(drawerLayout, "Add this location to your list?", 10 * 1000)
+                            .setAction("Add", v -> {
+                                placeViewModel.insert(place);
+                                Log.e(TAG, "onClick: Added");
+                            })
+                            .show();
+                }
+            } else {
+                Snackbar.make(drawerLayout, "Error, try again.", Snackbar.LENGTH_LONG).show();
+            }
+            hideKeyboard(MainActivity.this, view);
+            searchAutoComplete.clearFocus();
+        });
+    }
 
     private void fetchData() {
         Latlng location = getCurrentLocationLatLng();
         Log.e(TAG, "fetchData: latlng: " + location);
         if (location != null) {
+            selectedLatlng=location;
             weatherViewModel.getWeatherData(location.getLat(), location.getLng());
             String address = getAddressFromLatLng(getApplicationContext(), location.getLat(), location.getLng());
-            Log.e(TAG, "fetchData: "+address );
+            Log.e(TAG, "fetchData: " + address);
             searchAutoComplete.setText(address);
         }
     }
@@ -194,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             fetchData();
             swipeRefreshLayout.setRefreshing(false);
         });
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout){
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
             @Override
             public void onPageScrollStateChanged(int state) {
                 if (swipeRefreshLayout != null && !swipeRefreshLayout.isRefreshing()) {
@@ -225,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance();
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-        Log.e(TAG, "setupDrawer: current hour: "+currentHour );
+        Log.e(TAG, "setupDrawer: current hour: " + currentHour);
 
         if (currentHour >= 0 && currentHour < 4) {
             imgHeader.setImageDrawable(getDrawable(R.drawable.icon_moon_and_stars));
@@ -244,7 +256,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.action_home:
                     checkGPS();
                     fetchData();
-//                    searchAutoComplete.setText("");
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.action_location_list:
@@ -257,6 +268,13 @@ public class MainActivity extends AppCompatActivity {
                             .apply();
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                     finish();
+                case R.id.action_switch_to_c:
+                    weatherViewModel.getUnitObservable().setValue("metric");
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    break;
+                case R.id.action_switch_to_f:
+                    weatherViewModel.getUnitObservable().setValue("imperial");
+                    drawerLayout.closeDrawer(GravityCompat.START);
                     break;
             }
             return true;
@@ -298,62 +316,16 @@ public class MainActivity extends AppCompatActivity {
 /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
-
-        MenuItem menuItem = menu.findItem(R.id.action_search);
-        searchView = (SearchView) menuItem.getActionView();
-//        searchView.setIconifiedByDefault(false);
-//        searchView.findViewById(R.id.search_mag_icon).setVisibility(View.GONE);
-        searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
-        PlaceAutocompleteAdapter placeAutocompleteAdapter = new PlaceAutocompleteAdapter(this, R.layout.item_place_matching_name);
-        searchAutoComplete.setAdapter(placeAutocompleteAdapter);
-        searchAutoComplete.setSelectAllOnFocus(true);
-        searchAutoComplete.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        searchAutoComplete.setInputType(EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE);
-        searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
-            String address = parent.getItemAtPosition(position).toString();
-            Latlng latlng = getLocationLatLngFromAddress(getApplicationContext(), address);
-            if (latlng != null) {
-                weatherViewModel.getWeatherData(latlng.getLat(), latlng.getLng());
-                searchAutoComplete.setText(parent.getItemAtPosition(position).toString());
-                Place place = new Place(address, latlng.getLat(), latlng.getLng());
-                boolean isDuplicated = false;
-                for (Place p : currentPlaceList
-                ) {
-                    if (p.getAddress().equalsIgnoreCase(place.getAddress())) {
-                        isDuplicated = true;
-                        break;
-                    }
-                }
-                if (!isDuplicated) {
-                    Snackbar.make(drawerLayout, "Add this location to your list?", 10 * 1000)
-                            .setAction("Add", v -> {
-                                placeViewModel.insert(place);
-                                Log.e(TAG, "onClick: Added");
-                            })
-                            .show();
-                }
-            } else {
-                Snackbar.make(drawerLayout, "Error, try again.", Snackbar.LENGTH_LONG).show();
-            }
-            hideKeyboard(MainActivity.this, view);
-            searchAutoComplete.clearFocus();
-        });
-
-
-
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
         return true;
     }
 
- */
 
-/*
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
             checkGPS();
             fetchData();
-//            searchAutoComplete.setText("");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -368,6 +340,8 @@ public class MainActivity extends AppCompatActivity {
                 Place place = (Place) data.getSerializableExtra("place");
                 Log.e(TAG, "onActivityResult: " + place);
                 if (place != null) {
+                    selectedLatlng.setLat(place.getLat());
+                    selectedLatlng.setLng(place.getLng());
                     weatherViewModel.getWeatherData(place.getLat(), place.getLng());
                     searchAutoComplete.setText(place.getAddress());
                     searchAutoComplete.clearFocus();

@@ -22,6 +22,7 @@ import java.util.List;
 import static com.ration4l.nl.weather.utils.Utils.getCurrentHour;
 import static com.ration4l.nl.weather.utils.Utils.milisToDateTimeString;
 import static com.ration4l.nl.weather.utils.Utils.milisToHourString;
+import static com.ration4l.nl.weather.utils.Utils.standardizeString;
 
 /**
  * Created by ThanhLongNL on 10-Jul-20.
@@ -101,9 +102,10 @@ public class CurrentWeatherRVAdapter extends RecyclerView.Adapter<RecyclerView.V
 
         public void setContents(WeatherResponse weatherResponse) {
             tvDateTime.setText(milisToDateTimeString(System.currentTimeMillis()/1000));
-            tvTemp.setText(Math.round(weatherResponse.getCurrent().getTemp()) +"°");
+            int temp = Math.round(weatherResponse.getCurrent().getTemp());
+            tvTemp.setText(temp +"°");
             tvFeelLike.setText("Feels like "+ Math.round(weatherResponse.getCurrent().getFeelLike()) +"°");
-            tvDes.setText(weatherResponse.getCurrent().getWeather().get(0).getDescription());
+            tvDes.setText(standardizeString(weatherResponse.getCurrent().getWeather().get(0).getDescription()));
             String icon = weatherResponse.getCurrent().getWeather().get(0).getIcon();
             Picasso.with(context)
                     .load("https://openweathermap.org/img/wn/"+icon+"@2x.png")

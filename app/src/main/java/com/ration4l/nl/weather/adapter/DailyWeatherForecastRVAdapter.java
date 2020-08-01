@@ -20,6 +20,7 @@ import java.util.List;
 
 import static com.ration4l.nl.weather.utils.Utils.milisToDateString;
 import static com.ration4l.nl.weather.utils.Utils.milisToHourString;
+import static com.ration4l.nl.weather.utils.Utils.standardizeString;
 
 /**
  * Created by ThanhLongNL on 11-Jul-20.
@@ -86,7 +87,7 @@ public class DailyWeatherForecastRVAdapter extends RecyclerView.Adapter<DailyWea
 
         public void setContents(WeatherResponse.Daily daily) {
             tvDateTime.setText(milisToDateString(daily.getDt()));
-            tvDes.setText(daily.getWeather().get(0).getDescription());
+            tvDes.setText(standardizeString(daily.getWeather().get(0).getDescription()));
             tvMax.setText(Math.round(daily.getTemp().getMax())+"°");
             tvMin.setText(Math.round(daily.getTemp().getMin())+"°");
             tvWindSpeed.setText(daily.getWindSpeed()+" km/h");

@@ -53,20 +53,20 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.e(TAG, "onClick: Login");
-                v.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+                v.setBackground(getDrawable(R.drawable.background_button_onpress));
                 progressBar.setVisibility(View.VISIBLE);
                 hideKeyboard(LoginActivity.this, v);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        v.setBackgroundColor(getColor(R.color.colorPrimary));
+                        v.setBackground(getDrawable(R.drawable.background_button));
                         progressBar.setVisibility(View.GONE);
                         String email = etEmail.getText().toString().trim();
                         String password = etPassword.getText().toString().trim();
 
                         if (snapshot != null && snapshot.getValue() != null && snapshot.getChildrenCount() > 0) {
                             boolean isSuccessful = false;
-                            for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 User user = dataSnapshot.getValue(User.class);
                                 if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
                                     isSuccessful = true;
@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(TAG, "onCancelled: "+error.getMessage());
+                        Log.e(TAG, "onCancelled: " + error.getMessage());
                         progressBar.setVisibility(View.GONE);
                     }
                 });
@@ -109,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                v.setBackgroundColor(getColor(R.color.colorGreenDark));
+                v.setBackground(getDrawable(R.drawable.background_sub_button_onpress));
                 startActivityForResult(intent, REGISTER_REQUEST_CODE);
             }
         });
@@ -122,11 +122,11 @@ public class LoginActivity extends AppCompatActivity {
             if (data != null) {
                 String email = data.getStringExtra("email");
                 String password = data.getStringExtra("pass");
-                Log.e(TAG, "onActivityResult: email: "+email+", pass: "+password );
+                Log.e(TAG, "onActivityResult: email: " + email + ", pass: " + password);
                 etEmail.setText(email);
                 etPassword.setText(password);
             } else {
-                Log.e(TAG, "onActivityResult: returned null" );
+                Log.e(TAG, "onActivityResult: returned null");
             }
         } else {
             Log.e(TAG, "onActivityResult: failed");
@@ -137,6 +137,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.e(TAG, "onResume: ");
-        btnNavRegister.setBackgroundColor(getColor(R.color.colorGreen));
+        btnNavRegister.setBackground(getDrawable(R.drawable.background_sub_button));
     }
 }

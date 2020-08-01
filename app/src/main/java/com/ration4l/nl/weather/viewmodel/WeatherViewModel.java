@@ -14,6 +14,7 @@ public class WeatherViewModel extends ViewModel {
     private static final String TAG = "SharedViewModel";
     private WeatherRepository weatherRepository;
     private MutableLiveData<WeatherResponse> weatherLiveData;
+    private MutableLiveData<String> unitObservable;
     private MutableLiveData<Boolean> progressBarObservable;
 
 
@@ -21,14 +22,20 @@ public class WeatherViewModel extends ViewModel {
         weatherRepository = WeatherRepository.getInstance();
         weatherLiveData = weatherRepository.getWeatherResponseLiveData();
         progressBarObservable = weatherRepository.getProgressBarObservable();
+        unitObservable = new MutableLiveData<>();
+        unitObservable.setValue("metric");
     }
 
     public MutableLiveData<Boolean> getProgressBarObservable() {
         return progressBarObservable;
     }
 
+    public MutableLiveData<String> getUnitObservable() {
+        return unitObservable;
+    }
+
     public void getWeatherData(double lat, double lng){
-        weatherRepository.getWeatherData(lat, lng);
+        weatherRepository.getWeatherData(lat, lng, unitObservable.getValue());
     }
 
     public MutableLiveData<WeatherResponse> getWeatherLiveData() {

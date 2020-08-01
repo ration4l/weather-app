@@ -49,13 +49,13 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.e(TAG, "onClick: RegisterActivity" );
-                v.setBackgroundColor(getColor(R.color.colorPrimaryDark));
+                v.setBackground(getDrawable(R.drawable.background_button_onpress));
                 progressBar.setVisibility(View.VISIBLE);
                 hideKeyboard(RegisterActivity.this, v);
                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        v.setBackgroundColor(getColor(R.color.colorPrimary));
+                        v.setBackground(getDrawable(R.drawable.background_button));
                         progressBar.setVisibility(View.GONE);
                         Log.e(TAG, "onDataChange: ");
                         String email = etEmail.getText().toString().trim();
@@ -123,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
                         Log.e(TAG, "onCancelled: "+error.getMessage() );
-                        v.setBackgroundColor(getColor(R.color.colorPrimary));
+                        v.setBackground(getDrawable(R.drawable.background_button));
                         progressBar.setVisibility(View.GONE);
                     }
                 });
@@ -133,6 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btnBack.setTextColor(getColor(R.color.colorPrimaryDark));
                 finish();
             }
         });

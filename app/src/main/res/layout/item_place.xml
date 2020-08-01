@@ -6,16 +6,22 @@
     android:orientation="horizontal"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <ImageView
+        android:src="@drawable/ic_baseline_location_city_24"
+        android:padding="12dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"/>
+
     <TextView
         android:id="@+id/tv_place_address"
         android:text="Address "
+        android:textColor="@color/colorPrimaryText"
         android:gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:textSize="18sp"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        android:paddingStart="?android:attr/listPreferredItemPaddingStart"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
         android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
 
