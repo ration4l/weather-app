@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView android:id="@+id/tvMatchingName"
-    android:text="Matching name here..."
-    android:textColor="@color/colorPrimaryText"
-    android:background="@drawable/shape_background_result"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tvMatchingName"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:background="@drawable/shape_background_result"
     android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:paddingStart="?android:attr/listPreferredItemPaddingStart"
     android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-    android:minHeight="?android:attr/listPreferredItemHeightSmall"
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    android:text="Matching name here..."
+    android:textAppearance="?android:attr/textAppearanceListItemSmall"
+    android:textColor="@color/colorPrimaryText" />

@@ -34,8 +34,7 @@ public class PlacesAcitivity extends AppCompatActivity implements PlaceRVAdapter
     private PlaceRVAdapter placeRVAdapter;
     private List<Place> currentPlaceList = new ArrayList<>();
     private PlaceViewModel placeViewModel;
-//    private String address;
-    public static final int MENU_ITEM_DELETE_ID = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,17 +53,17 @@ public class PlacesAcitivity extends AppCompatActivity implements PlaceRVAdapter
 
         recyclerView = findViewById(R.id.recyclerview_place);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(PlacesAcitivity.this,DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(PlacesAcitivity.this, DividerItemDecoration.VERTICAL));
         placeRVAdapter = new PlaceRVAdapter();
         recyclerView.setAdapter(placeRVAdapter);
 //        placeRVAdapter.setOnCreatePlaceContextMenuListener(this::setOnCreatePlaceContextMenu);
-        placeRVAdapter.setOnPlaceSelectedListener(this::setOnPlaceSelected);
+        placeRVAdapter.setOnPlaceSelectedListener(this);
 
         new ItemTouchHelper(itemTouchCallback).attachToRecyclerView(recyclerView);
 
         placeViewModel = new ViewModelProvider(this).get(PlaceViewModel.class);
         placeViewModel.getAllPlaces().observe(this, places -> {
-            Log.e(TAG, "onChanged: "+places );
+            Log.e(TAG, "onChanged: " + places);
             placeRVAdapter.setData(places);
             currentPlaceList.clear();
             currentPlaceList.addAll(places);
@@ -121,19 +120,19 @@ public class PlacesAcitivity extends AppCompatActivity implements PlaceRVAdapter
 
     private ItemTouchHelper.SimpleCallback itemTouchCallback = new
             ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-        @Override
-        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-            return false;
-        }
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
 
-        @Override
-        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            int recentPosition = viewHolder.getAdapterPosition();
-            Place recentDeletedPlace = currentPlaceList.get(recentPosition);
-            placeViewModel.deletePlace(recentDeletedPlace.getAddress());
-            Snackbar.make(rootLayout, "Place deleted.", 10*1000)
-                    .setAction("Undo", v -> placeViewModel.insert(recentDeletedPlace))
-                    .show();
-        }
-    };
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    int recentPosition = viewHolder.getAdapterPosition();
+                    Place recentDeletedPlace = currentPlaceList.get(recentPosition);
+                    placeViewModel.deletePlace(recentDeletedPlace.getAddress());
+                    Snackbar.make(rootLayout, "Place deleted.", 10 * 1000)
+                            .setAction("Undo", v -> placeViewModel.insert(recentDeletedPlace))
+                            .show();
+                }
+            };
 }

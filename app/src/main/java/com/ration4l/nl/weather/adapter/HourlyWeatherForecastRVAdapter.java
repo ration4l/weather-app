@@ -22,7 +22,7 @@ import static com.ration4l.nl.weather.utils.Utils.milisToHourString;
  * Created by ThanhLongNL on 11-Jul-20.
  */
 
-public class HourlyWeatherForecastRVAdapter extends RecyclerView.Adapter<HourlyWeatherForecastRVAdapter.HourlyWeatherViewHolder>{
+public class HourlyWeatherForecastRVAdapter extends RecyclerView.Adapter<HourlyWeatherForecastRVAdapter.HourlyWeatherViewHolder> {
     private Context context;
     private List<WeatherResponse.Hourly> list;
 
@@ -34,7 +34,7 @@ public class HourlyWeatherForecastRVAdapter extends RecyclerView.Adapter<HourlyW
     @NonNull
     @Override
     public HourlyWeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view  = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hourly_weather_forecast, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_hourly_weather_forecast, parent, false);
         return new HourlyWeatherViewHolder(view);
     }
 
@@ -48,9 +48,10 @@ public class HourlyWeatherForecastRVAdapter extends RecyclerView.Adapter<HourlyW
         return list.size();
     }
 
-    class HourlyWeatherViewHolder extends RecyclerView.ViewHolder{
+    class HourlyWeatherViewHolder extends RecyclerView.ViewHolder {
         private TextView tvHourlyTime, tvHourlyTemp;
         private ImageView imgHourlyIcon;
+
         public HourlyWeatherViewHolder(@NonNull View itemView) {
             super(itemView);
             tvHourlyTemp = itemView.findViewById(R.id.tvHourlyTemp);
@@ -59,11 +60,11 @@ public class HourlyWeatherForecastRVAdapter extends RecyclerView.Adapter<HourlyW
         }
 
         public void setContents(WeatherResponse.Hourly hourly) {
-            tvHourlyTemp.setText(Math.round(hourly.getTemp()) +"°");
+            tvHourlyTemp.setText(Math.round(hourly.getTemp()) + "°");
             tvHourlyTime.setText(milisToHourString(hourly.getDt()));
             String icon = hourly.getWeather().get(0).getIcon();
             Picasso.with(context)
-                    .load("https://openweathermap.org/img/wn/"+icon+"@2x.png")
+                    .load("https://openweathermap.org/img/wn/" + icon + "@2x.png")
                     .into(imgHourlyIcon);
         }
     }

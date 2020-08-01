@@ -60,10 +60,10 @@
         android:id="@+id/btnRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
         android:background="@drawable/background_button"
-        android:textColor="@color/colorWhite"
         android:padding="4dp"
+        android:text="Register"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/etUsername"
         app:layout_constraintTop_toBottomOf="@+id/etPassword"
@@ -71,12 +71,12 @@
 
     <Button
         android:id="@+id/btnBack"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/background_transparent_button"
         android:text="Back"
         android:textColor="@color/colorPrimary"
-        style="@style/Widget.AppCompat.TextView.SpinnerItem"
-        android:background="@drawable/background_transparent_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@+id/etPassword"
@@ -91,5 +91,5 @@
         app:layout_constraintBottom_toTopOf="@+id/btnRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"/>
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -66,7 +66,7 @@ public class PlaceAutocompleteAdapter extends ArrayAdapter<PlaceSuggestionRespon
     @NonNull
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
+        return new Filter() {
             private final Object lock = new Object();
             private final Object lock2 = new Object();
             boolean finished = false;
@@ -89,7 +89,9 @@ public class PlaceAutocompleteAdapter extends ArrayAdapter<PlaceSuggestionRespon
                         @Override
                         public void onResponse(Call<PlaceSuggestionResponse> call, Response<PlaceSuggestionResponse> response) {
                             if (response.isSuccessful()) {
-                                suggestionList = response.body().getEmbedded().citySearchResults;
+                                if (response.body() != null) {
+                                    suggestionList = response.body().getEmbedded().citySearchResults;
+                                }
                                 finished = true;
                                 synchronized (lock2) {
                                     lock2.notifyAll();
@@ -127,7 +129,6 @@ public class PlaceAutocompleteAdapter extends ArrayAdapter<PlaceSuggestionRespon
                 }
             }
         };
-        return filter;
     }
 
 }

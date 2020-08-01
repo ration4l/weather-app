@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/layout_place_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="horizontal">
 
     <ImageView
-        android:src="@drawable/ic_baseline_location_city_24"
-        android:padding="12dp"
         android:layout_width="64dp"
-        android:layout_height="64dp"/>
+        android:layout_height="64dp"
+        android:padding="12dp"
+        android:src="@drawable/ic_baseline_location_city_24" />
 
     <TextView
         android:id="@+id/tv_place_address"
-        android:text="Address "
-        android:textColor="@color/colorPrimaryText"
-        android:gravity="center_vertical"
+        style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:textSize="18sp"
-        style="@style/TextAppearance.MaterialComponents.Body1"
-        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:gravity="center_vertical"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
         android:paddingEnd="?android:attr/listPreferredItemPaddingEnd"
-        android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
+        android:text="Address "
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:textColor="@color/colorPrimaryText"
+        android:textSize="18sp" />
 
 </LinearLayout>

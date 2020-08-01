@@ -9,10 +9,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class WeatherRetrofitService {
     private static Retrofit INTANCE;
-    public static final String OPEN_WEATHER_MAP_URL ="https://api.openweathermap.org";
+    public static final String OPEN_WEATHER_MAP_URL = "https://api.openweathermap.org";
 
-    public static Retrofit getInstance(){
-        if (INTANCE==null){
+    public static Retrofit getInstance() {
+        if (INTANCE == null) {
             INTANCE = new Retrofit.Builder()
                     .baseUrl(OPEN_WEATHER_MAP_URL)
                     .addConverterFactory(GsonConverterFactory.create())

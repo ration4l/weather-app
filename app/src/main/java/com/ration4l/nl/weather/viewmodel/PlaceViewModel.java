@@ -16,7 +16,6 @@ import java.util.List;
  */
 
 public class PlaceViewModel extends AndroidViewModel {
-    private static final String TAG = "PlaceViewModel";
     private PlaceRepository placeRepository;
     private LiveData<List<Place>> allPlaces;
 
@@ -31,11 +30,11 @@ public class PlaceViewModel extends AndroidViewModel {
         return allPlaces;
     }
 
-    public void insert(Place place){
+    public void insert(Place place) {
         placeRepository.insert(place);
     }
 
-    public void deletePlace(String placeAddress){
+    public void deletePlace(String placeAddress) {
         placeRepository.deletePlace(placeAddress);
     }
 }

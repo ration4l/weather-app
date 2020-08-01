@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="64dp"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="64dp"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:padding="4dp">
 
     <TextView
         android:id="@+id/tvHourlyTemp"
-        android:textColor="#FFFFFF"
-        android:text="Temp"
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Temp"
+        android:textColor="#FFFFFF" />
 
     <ImageView
         android:id="@+id/imgHourlyIcon"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
-        android:layout_gravity="center_horizontal"
-        />
+        android:scaleType="fitXY" />
 
     <TextView
         android:id="@+id/tvHourlyTime"
-        android:text="Hour"
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Hour" />
 
 </LinearLayout>

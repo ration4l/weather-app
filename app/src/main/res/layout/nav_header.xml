@@ -11,9 +11,9 @@
 
     <ImageView
         android:id="@+id/nav_header_img"
-        android:layout_gravity="center_horizontal"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:layout_gravity="center_horizontal"
         android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher" />
 

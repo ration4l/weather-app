@@ -1,97 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp">
 
     <TextView
-        android:text="Current Details"
-        android:textColor="@color/colorPrimaryText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Current Details"
+        android:textColor="@color/colorPrimaryText" />
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TableRow
-            android:paddingVertical="4dp">
-            <TextView
-                android:layout_weight="1"
-                android:text="Wind speed"/>
+        <TableRow android:paddingVertical="4dp">
 
             <TextView
                 android:layout_weight="1"
+                android:text="Wind speed" />
+
+            <TextView
                 android:id="@+id/tvWindSpeed"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Wind speed value"/>
+                android:layout_weight="1"
+                android:text="Wind speed value"
+                android:textColor="@color/colorPrimaryText" />
         </TableRow>
 
-        <TableRow
-            android:paddingVertical="4dp">
-            <TextView
-                android:layout_weight="1"
-                android:text="Humidity"/>
+        <TableRow android:paddingVertical="4dp">
 
             <TextView
                 android:layout_weight="1"
+                android:text="Humidity" />
+
+            <TextView
                 android:id="@+id/tvHumidity"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Humidity value"/>
+                android:layout_weight="1"
+                android:text="Humidity value"
+                android:textColor="@color/colorPrimaryText" />
         </TableRow>
 
-        <TableRow
-            android:paddingVertical="4dp">
-            <TextView
-                android:layout_weight="1"
-                android:text="UV Index"/>
+        <TableRow android:paddingVertical="4dp">
 
             <TextView
                 android:layout_weight="1"
+                android:text="UV Index" />
+
+            <TextView
                 android:id="@+id/tvUVIndex"
-                android:textColor="@color/colorPrimaryText"
-                android:text="UV Index value"/>
+                android:layout_weight="1"
+                android:text="UV Index value"
+                android:textColor="@color/colorPrimaryText" />
         </TableRow>
 
-        <TableRow
-            android:paddingVertical="4dp">
-            <TextView
-                android:layout_weight="1"
-                android:text="Visibility"/>
+        <TableRow android:paddingVertical="4dp">
 
             <TextView
                 android:layout_weight="1"
+                android:text="Visibility" />
+
+            <TextView
                 android:id="@+id/tvVisibility"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Visibility value"/>
+                android:layout_weight="1"
+                android:text="Visibility value"
+                android:textColor="@color/colorPrimaryText" />
         </TableRow>
 
-        <TableRow
-            android:paddingVertical="4dp">
-            <TextView
-                android:layout_weight="1"
-                android:text="Sunrise"/>
+        <TableRow android:paddingVertical="4dp">
 
             <TextView
                 android:layout_weight="1"
+                android:text="Sunrise" />
+
+            <TextView
                 android:id="@+id/tvSunrise"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Sunrise value"/>
+                android:layout_weight="1"
+                android:text="Sunrise value"
+                android:textColor="@color/colorPrimaryText" />
         </TableRow>
 
-        <TableRow
-            android:paddingVertical="4dp">
-            <TextView
-                android:layout_weight="1"
-                android:text="Sunset"/>
+        <TableRow android:paddingVertical="4dp">
 
             <TextView
                 android:layout_weight="1"
+                android:text="Sunset" />
+
+            <TextView
                 android:id="@+id/tvSunset"
-                android:textColor="@color/colorPrimaryText"
-                android:text="Sunset value"/>
+                android:layout_weight="1"
+                android:text="Sunset value"
+                android:textColor="@color/colorPrimaryText" />
         </TableRow>
 
     </TableLayout>

@@ -1,13 +1,10 @@
 package com.ration4l.nl.weather;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Space;
 
-import com.ration4l.nl.weather.utils.SharedPreferencesManager;
+import androidx.appcompat.app.AppCompatActivity;
 
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getFirstUseState;
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getLoginState;
@@ -23,9 +20,9 @@ public class SplashActivity extends AppCompatActivity {
 
         if (getFirstUseState(getApplicationContext())) {
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
-            saveFirstUseState(getApplicationContext(), true);
+            saveFirstUseState(getApplicationContext(), false);
         } else {
-            if (getLoginState(getApplicationContext())){
+            if (getLoginState(getApplicationContext())) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
             } else {
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));

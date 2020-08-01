@@ -1,29 +1,33 @@
 package com.ration4l.nl.weather.viewmodel;
 
+import android.app.Application;
+
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.ration4l.nl.weather.model.WeatherResponse;
 import com.ration4l.nl.weather.reposistory.WeatherRepository;
+
+import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getUnit;
 
 /**
  * Created by ThanhLongNL on 11-Jul-20.
  */
 
-public class WeatherViewModel extends ViewModel {
-    private static final String TAG = "SharedViewModel";
+public class WeatherViewModel extends AndroidViewModel {
     private WeatherRepository weatherRepository;
     private MutableLiveData<WeatherResponse> weatherLiveData;
     private MutableLiveData<String> unitObservable;
     private MutableLiveData<Boolean> progressBarObservable;
 
 
-    public WeatherViewModel() {
+    public WeatherViewModel(Application application) {
+        super(application);
         weatherRepository = WeatherRepository.getInstance();
         weatherLiveData = weatherRepository.getWeatherResponseLiveData();
         progressBarObservable = weatherRepository.getProgressBarObservable();
         unitObservable = new MutableLiveData<>();
-        unitObservable.setValue("metric");
+        unitObservable.setValue(getUnit(application));
     }
 
     public MutableLiveData<Boolean> getProgressBarObservable() {
@@ -34,7 +38,7 @@ public class WeatherViewModel extends ViewModel {
         return unitObservable;
     }
 
-    public void getWeatherData(double lat, double lng){
+    public void getWeatherData(double lat, double lng) {
         weatherRepository.getWeatherData(lat, lng, unitObservable.getValue());
     }
 

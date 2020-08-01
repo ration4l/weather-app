@@ -22,8 +22,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 0: return CurrentWeatherFragment.newInstance();
-            case 1: return DailyWeatherForecastFragment.newInstance();
+            case 0:
+                return CurrentWeatherFragment.newInstance();
+            case 1:
+                return DailyWeatherForecastFragment.newInstance();
         }
         return null;
     }
@@ -37,8 +39,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         switch (position) {
-            case 0: return "TODAY";
-            case 1: return "7 DAYS";
+            case 0:
+                return "TODAY";
+            case 1:
+                return "7 DAYS";
         }
         return null;
     }

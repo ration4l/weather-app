@@ -7,8 +7,6 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
@@ -25,7 +23,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
@@ -47,6 +44,7 @@ import java.util.List;
 
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getEmail;
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getUsername;
+import static com.ration4l.nl.weather.utils.SharedPreferencesManager.saveUnit;
 import static com.ration4l.nl.weather.utils.Utils.getAddressFromLatLng;
 import static com.ration4l.nl.weather.utils.Utils.getLocationLatLngFromAddress;
 import static com.ration4l.nl.weather.utils.Utils.hideKeyboard;
@@ -68,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Place> currentPlaceList = new ArrayList<>();
 
     private Latlng selectedLatlng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -76,33 +75,14 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progressBar);
 
-        weatherViewModel = new ViewModelProvider(MainActivity.this).get(WeatherViewModel.class);
-        weatherViewModel.getProgressBarObservable().observe(MainActivity.this, aBoolean -> {
-            if (aBoolean) {
 
-                progressBar.setVisibility(View.VISIBLE);
-            } else {
-
-                progressBar.setVisibility(View.GONE);
-            }
-        });
-        weatherViewModel.getUnitObservable().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                weatherViewModel.getWeatherData(selectedLatlng.getLat(),selectedLatlng.getLng());
-            }
-        });
-
-        placeViewModel = new ViewModelProvider(MainActivity.this).get(PlaceViewModel.class);
-        placeViewModel.getAllPlaces().observe(this, places -> {
-            currentPlaceList.clear();
-            currentPlaceList.addAll(places);
-        });
         setupDrawer();
         setupTabs();
         setupSearchview();
         checkGPS();
-        fetchData();
+        initViewModel();
+
+        fetchCurrentLocationWeatherData();
 //        setupFloatingSearchView();
         /*
          Places.initialize(this, "AIzaSyCA3Atkye7dnmN6OXS7vNC6YJDRkhLty78");
@@ -124,6 +104,23 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
+    private void initViewModel() {
+        weatherViewModel = new ViewModelProvider(MainActivity.this).get(WeatherViewModel.class);
+        weatherViewModel.getProgressBarObservable().observe(MainActivity.this,
+                aBoolean -> progressBar.setVisibility(aBoolean ? View.VISIBLE : View.GONE));
+        weatherViewModel.getUnitObservable().observe(this, s -> {
+            if (selectedLatlng != null) {
+                weatherViewModel.getWeatherData(selectedLatlng.getLat(), selectedLatlng.getLng());
+            }
+        });
+
+        placeViewModel = new ViewModelProvider(MainActivity.this).get(PlaceViewModel.class);
+        placeViewModel.getAllPlaces().observe(this, places -> {
+            currentPlaceList.clear();
+            currentPlaceList.addAll(places);
+        });
+    }
+
     private void setupSearchview() {
         searchView = findViewById(R.id.customSearchview);
         searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
@@ -140,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             String address = parent.getItemAtPosition(position).toString();
             Latlng latlng = getLocationLatLngFromAddress(getApplicationContext(), address);
             if (latlng != null) {
-                selectedLatlng=latlng;
+                selectedLatlng = latlng;
                 weatherViewModel.getWeatherData(latlng.getLat(), latlng.getLng());
                 searchAutoComplete.setText(parent.getItemAtPosition(position).toString());
                 Place place = new Place(address, latlng.getLat(), latlng.getLng());
@@ -168,11 +165,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void fetchData() {
+    private void fetchCurrentLocationWeatherData() {
         Latlng location = getCurrentLocationLatLng();
         Log.e(TAG, "fetchData: latlng: " + location);
         if (location != null) {
-            selectedLatlng=location;
+            selectedLatlng = location;
             weatherViewModel.getWeatherData(location.getLat(), location.getLng());
             String address = getAddressFromLatLng(getApplicationContext(), location.getLat(), location.getLng());
             Log.e(TAG, "fetchData: " + address);
@@ -185,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
         }
         GpsTracker gpsTracker = new GpsTracker(MainActivity.this);
+        selectedLatlng = getCurrentLocationLatLng();
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             if (locationManager != null && !locationManager.isLocationEnabled()) {
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(() -> {
             Log.e(TAG, "onRefresh: refreshing");
-            fetchData();
+            fetchCurrentLocationWeatherData();
             swipeRefreshLayout.setRefreshing(false);
         });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
@@ -239,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         Log.e(TAG, "setupDrawer: current hour: " + currentHour);
 
-        if (currentHour >= 0 && currentHour < 4) {
+        if (currentHour < 4) {
             imgHeader.setImageDrawable(getDrawable(R.drawable.icon_moon_and_stars));
         } else if (currentHour < 8) {
             imgHeader.setImageDrawable(getDrawable(R.drawable.icon_sunrise));
@@ -247,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             imgHeader.setImageDrawable(getDrawable(R.drawable.icon_sun));
         } else if (currentHour < 18) {
             imgHeader.setImageDrawable(getDrawable(R.drawable.icon_sun_smiling));
-        } else if (currentHour <= 23) {
+        } else {
             imgHeader.setImageDrawable(getDrawable(R.drawable.icon_night));
         }
 
@@ -255,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.action_home:
                     checkGPS();
-                    fetchData();
+                    fetchCurrentLocationWeatherData();
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.action_location_list:
@@ -270,10 +268,12 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 case R.id.action_switch_to_c:
                     weatherViewModel.getUnitObservable().setValue("metric");
+                    saveUnit(getApplicationContext(), "metric");
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.action_switch_to_f:
                     weatherViewModel.getUnitObservable().setValue("imperial");
+                    saveUnit(getApplicationContext(), "imperial");
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
             }
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            fetchData();
+            fetchCurrentLocationWeatherData();
         }
     }
 

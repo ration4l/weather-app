@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,10 +12,10 @@
 
     <ImageView
         android:id="@+id/imgAppIcon"
-        android:src="@drawable/icon_rainbow"
-        android:layout_marginBottom="16dp"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/icon_rainbow"
         app:layout_constraintBottom_toTopOf="@+id/etEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -55,8 +54,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/background_button"
-        android:textColor="@color/colorWhite"
         android:text="Log in"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
@@ -67,18 +66,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-or-"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnNavRegister"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintBottom_toTopOf="@+id/btnNavRegister"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
     <Button
         android:id="@+id/btnNavRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create an account"
-        android:padding="8dp"
         android:background="@drawable/background_sub_button"
+        android:padding="8dp"
+        android:text="Create an account"
         android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -95,5 +94,5 @@
         app:layout_constraintBottom_toTopOf="@+id/btnLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"/>
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 </androidx.constraintlayout.widget.ConstraintLayout>

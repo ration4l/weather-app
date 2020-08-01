@@ -9,9 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PlacesAPIRetrofitService {
     private static Retrofit retrofit;
-    public static final String TELEPORT_URL ="https://api.teleport.org";
+    public static final String TELEPORT_URL = "https://api.teleport.org";
 
-    public static Retrofit getRetrofitInstance(){
+    public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(TELEPORT_URL)

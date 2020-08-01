@@ -1,19 +1,17 @@
 package com.ration4l.nl.weather;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.ration4l.nl.weather.adapter.DailyWeatherForecastRVAdapter;
 import com.ration4l.nl.weather.model.WeatherResponse;
@@ -64,13 +62,10 @@ public class DailyWeatherForecastFragment extends Fragment {
         initComponents(view);
 
         weatherViewModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
-        weatherViewModel.getWeatherLiveData().observe(getActivity(), new Observer<WeatherResponse>() {
-            @Override
-            public void onChanged(WeatherResponse weatherResponse) {
-                list.clear();
-                list.addAll(weatherResponse.getDaily().subList(1,8));
-                adapter.notifyDataSetChanged();
-            }
+        weatherViewModel.getWeatherLiveData().observe(getActivity(), weatherResponse -> {
+            list.clear();
+            list.addAll(weatherResponse.getDaily().subList(1,8));
+            adapter.notifyDataSetChanged();
         });
     }
 

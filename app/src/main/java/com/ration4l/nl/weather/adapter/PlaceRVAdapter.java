@@ -27,16 +27,9 @@ public class PlaceRVAdapter extends RecyclerView.Adapter<PlaceRVAdapter.PlaceVie
     private static final String TAG = "PlaceRVAdapter";
 
     private List<Place> allPlaces;
-
     private List<Place> places;
 
-//    private OnCreatePlaceContextMenuListener onCreatePlaceContextMenuListener;
-
     private OnPlaceSelectedListener onPlaceSelectedListener;
-
-//    public void setOnCreatePlaceContextMenuListener(OnCreatePlaceContextMenuListener onCreatePlaceContextMenuListener) {
-//        this.onCreatePlaceContextMenuListener = onCreatePlaceContextMenuListener;
-//    }
 
     public void setOnPlaceSelectedListener(OnPlaceSelectedListener onPlaceSelectedListener) {
         this.onPlaceSelectedListener = onPlaceSelectedListener;
@@ -104,13 +97,13 @@ public class PlaceRVAdapter extends RecyclerView.Adapter<PlaceRVAdapter.PlaceVie
         protected void publishResults(CharSequence constraint, FilterResults results) {
             places.clear();
             places.addAll((List) results.values);
-            Log.e(TAG, "publishResults: places: "+places );
-            Log.e(TAG, "publishResults: allPlaces: "+allPlaces );
+            Log.e(TAG, "publishResults: places: " + places);
+            Log.e(TAG, "publishResults: allPlaces: " + allPlaces);
             notifyDataSetChanged();
         }
     };
 
-    class PlaceViewHolder extends RecyclerView.ViewHolder  {
+    class PlaceViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout container;
         private TextView tvAddress;
 
@@ -136,14 +129,6 @@ public class PlaceRVAdapter extends RecyclerView.Adapter<PlaceRVAdapter.PlaceVie
         places.addAll(placeList);
         notifyDataSetChanged();
     }
-
-    public Place getPlace(int position){
-        return places.get(position);
-    }
-
-//    public interface OnCreatePlaceContextMenuListener {
-//        void setOnCreatePlaceContextMenu(String address);
-//    }
 
     public interface OnPlaceSelectedListener {
         void setOnPlaceSelected(Place placeSelected);

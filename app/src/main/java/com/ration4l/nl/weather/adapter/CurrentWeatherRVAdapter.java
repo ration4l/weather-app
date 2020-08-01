@@ -28,7 +28,7 @@ import static com.ration4l.nl.weather.utils.Utils.standardizeString;
  * Created by ThanhLongNL on 10-Jul-20.
  */
 
-public class CurrentWeatherRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class CurrentWeatherRVAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "DayWeatherRVAdapter";
     public static final int TYPE_DAY_WEATHER = 0;
     public static final int TYPE_DAY_WEATHER_DETAIL = 1;
@@ -70,24 +70,25 @@ public class CurrentWeatherRVAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     @Override
     public int getItemCount() {
-        Log.e(TAG, "getItemCount: " + list.size() );
+        Log.e(TAG, "getItemCount: " + list.size());
         return list.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (list.get(position) instanceof WeatherResponse){
+        if (list.get(position) instanceof WeatherResponse) {
             return TYPE_DAY_WEATHER;
-        } else if (list.get(position) instanceof WeatherResponse.Current){
+        } else if (list.get(position) instanceof WeatherResponse.Current) {
             return TYPE_DAY_WEATHER_DETAIL;
         }
         return -1;
     }
 
-    class DayWeatherViewHolder extends RecyclerView.ViewHolder{
+    class DayWeatherViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDateTime, tvTemp, tvFeelLike, tvDes;
         private ImageView imgIcon;
         private RecyclerView recyclerView;
+
         public DayWeatherViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -101,17 +102,17 @@ public class CurrentWeatherRVAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         public void setContents(WeatherResponse weatherResponse) {
-            tvDateTime.setText(milisToDateTimeString(System.currentTimeMillis()/1000));
+            tvDateTime.setText(milisToDateTimeString(System.currentTimeMillis() / 1000));
             int temp = Math.round(weatherResponse.getCurrent().getTemp());
-            tvTemp.setText(temp +"°");
-            tvFeelLike.setText("Feels like "+ Math.round(weatherResponse.getCurrent().getFeelLike()) +"°");
+            tvTemp.setText(temp + "°");
+            tvFeelLike.setText("Feels like " + Math.round(weatherResponse.getCurrent().getFeelLike()) + "°");
             tvDes.setText(standardizeString(weatherResponse.getCurrent().getWeather().get(0).getDescription()));
             String icon = weatherResponse.getCurrent().getWeather().get(0).getIcon();
             Picasso.with(context)
-                    .load("https://openweathermap.org/img/wn/"+icon+"@2x.png")
+                    .load("https://openweathermap.org/img/wn/" + icon + "@2x.png")
                     .into(imgIcon);
             List<WeatherResponse.Hourly> hourlyList = new ArrayList<>();
-            hourlyList.addAll(weatherResponse.getHourly().subList(0,24 - getCurrentHour() + 6 + 1));
+            hourlyList.addAll(weatherResponse.getHourly().subList(0, 24 - getCurrentHour() + 6 + 1));
             HourlyWeatherForecastRVAdapter hourlyWeatherRVAdapter = new HourlyWeatherForecastRVAdapter(context, hourlyList);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
             recyclerView.setLayoutManager(layoutManager);
@@ -120,8 +121,9 @@ public class CurrentWeatherRVAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
     }
 
-    static class DayWeatherDetailViewHolder extends RecyclerView.ViewHolder{
+    static class DayWeatherDetailViewHolder extends RecyclerView.ViewHolder {
         private TextView tvWindSpeed, tvHumidity, tvUVIndex, tvVisibility, tvSunrise, tvSunset;
+
         public DayWeatherDetailViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -134,10 +136,10 @@ public class CurrentWeatherRVAdapter extends RecyclerView.Adapter<RecyclerView.V
         }
 
         public void setContents(WeatherResponse.Current current) {
-            tvWindSpeed.setText(current.getWindSpeed()+" km/h");
-            tvHumidity.setText(current.getHumidity()+"%");
+            tvWindSpeed.setText(current.getWindSpeed() + " km/h");
+            tvHumidity.setText(current.getHumidity() + "%");
             tvUVIndex.setText(String.valueOf(current.getUvi()));
-            tvVisibility.setText((int)current.getVisibility()/1000+" km");
+            tvVisibility.setText((int) current.getVisibility() / 1000 + " km");
             tvSunrise.setText(milisToHourString(current.getSunRise()));
             tvSunset.setText(milisToHourString(current.getSunSet()));
         }

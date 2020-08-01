@@ -27,7 +27,6 @@ import static com.ration4l.nl.weather.utils.Utils.standardizeString;
  */
 
 public class DailyWeatherForecastRVAdapter extends RecyclerView.Adapter<DailyWeatherForecastRVAdapter.DailyWeatherViewHolder> {
-    private static final String TAG = "MultiDayWeatherRVAdapte";
     private List<WeatherResponse.Daily> list;
     private Context context;
 
@@ -47,7 +46,7 @@ public class DailyWeatherForecastRVAdapter extends RecyclerView.Adapter<DailyWea
         holder.setContents(list.get(position));
 
         boolean isExpanded = list.get(position).isExpanded();
-        holder.expandableLayout.setVisibility(isExpanded? View.VISIBLE : View.GONE);
+        holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -55,11 +54,12 @@ public class DailyWeatherForecastRVAdapter extends RecyclerView.Adapter<DailyWea
         return list.size();
     }
 
-    class DailyWeatherViewHolder extends RecyclerView.ViewHolder{
+    class DailyWeatherViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDateTime, tvDes, tvMax, tvMin, tvWindSpeed, tvHumidity, tvUVIndex, tvSunrise, tvSunset;
         private ImageView imgDailyIcon;
         private TableLayout expandableLayout;
         private LinearLayout linearLayout;
+
         public DailyWeatherViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -88,17 +88,17 @@ public class DailyWeatherForecastRVAdapter extends RecyclerView.Adapter<DailyWea
         public void setContents(WeatherResponse.Daily daily) {
             tvDateTime.setText(milisToDateString(daily.getDt()));
             tvDes.setText(standardizeString(daily.getWeather().get(0).getDescription()));
-            tvMax.setText(Math.round(daily.getTemp().getMax())+"°");
-            tvMin.setText(Math.round(daily.getTemp().getMin())+"°");
-            tvWindSpeed.setText(daily.getWindSpeed()+" km/h");
-            tvHumidity.setText(daily.getHumidity()+"%");
-            tvUVIndex.setText(daily.getUvi()+"");
+            tvMax.setText(Math.round(daily.getTemp().getMax()) + "°");
+            tvMin.setText(Math.round(daily.getTemp().getMin()) + "°");
+            tvWindSpeed.setText(daily.getWindSpeed() + " km/h");
+            tvHumidity.setText(daily.getHumidity() + "%");
+            tvUVIndex.setText(daily.getUvi() + "");
             tvSunrise.setText(milisToHourString(daily.getSunrise()));
             tvSunset.setText(milisToHourString(daily.getSunset()));
 
             String icon = daily.getWeather().get(0).getIcon();
             Picasso.with(context)
-                    .load("https://openweathermap.org/img/wn/"+icon+"@2x.png")
+                    .load("https://openweathermap.org/img/wn/" + icon + "@2x.png")
                     .into(imgDailyIcon);
         }
     }

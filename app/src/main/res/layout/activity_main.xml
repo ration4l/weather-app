@@ -5,12 +5,11 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity"
     android:clickable="true"
+    android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
-    tools:openDrawer="start"
-    >
+    tools:context=".MainActivity"
+    tools:openDrawer="start">
 
     <LinearLayout
         android:id="@+id/layout_main"
@@ -25,32 +24,30 @@
             android:background="@color/colorPrimary"
             android:elevation="8dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            >
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/customSearchview"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                app:iconifiedByDefault="false"
-                app:searchIcon="@null"
-                app:queryHint="Search places"
-                android:background="@drawable/shape_background_search"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shape_background_search"
+                app:iconifiedByDefault="false"
+                app:queryHint="Search places"
+                app:searchIcon="@null" />
 
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
-            android:elevation="8dp"
-            android:background="@color/colorPrimary"
-            app:tabIndicatorColor="@color/colorWhite"
-            app:tabSelectedTextColor="@color/colorWhite"
-            app:tabTextColor="@color/colorPrimaryLight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:background="@color/colorPrimary"
+            android:elevation="8dp"
+            app:tabIndicatorColor="@color/colorWhite"
+            app:tabSelectedTextColor="@color/colorWhite"
+            app:tabTextColor="@color/colorPrimaryLight" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -68,11 +65,11 @@
 
                 <ProgressBar
                     android:id="@+id/progressBar"
-                    android:visibility="gone"
                     style="@style/Widget.AppCompat.ProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:indeterminateTint="@color/colorPrimaryDark"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -89,8 +86,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        android:background="@color/colorWhite"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu"
-        android:background="@color/colorWhite"/>
+        app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

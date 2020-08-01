@@ -28,6 +28,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etEmail, etUsername, etPassword;
     private Button btnReg, btnBack;
     private ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,41 +46,36 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference("users");
 
-        btnReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e(TAG, "onClick: RegisterActivity" );
-                v.setBackground(getDrawable(R.drawable.background_button_onpress));
-                progressBar.setVisibility(View.VISIBLE);
-                hideKeyboard(RegisterActivity.this, v);
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        v.setBackground(getDrawable(R.drawable.background_button));
-                        progressBar.setVisibility(View.GONE);
-                        Log.e(TAG, "onDataChange: ");
-                        String email = etEmail.getText().toString().trim();
-                        String name = etUsername.getText().toString().trim();
-                        String password = etPassword.getText().toString().trim();
+        btnReg.setOnClickListener(v -> {
+            Log.e(TAG, "onClick: RegisterActivity");
+            v.setBackground(getDrawable(R.drawable.background_button_onpress));
+            progressBar.setVisibility(View.VISIBLE);
+            hideKeyboard(RegisterActivity.this, v);
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    v.setBackground(getDrawable(R.drawable.background_button));
+                    progressBar.setVisibility(View.GONE);
+                    String email = etEmail.getText().toString().trim();
+                    String name = etUsername.getText().toString().trim();
+                    String password = etPassword.getText().toString().trim();
 
-                        if (!TextUtils.isEmpty(email)
-                                && !TextUtils.isEmpty(name)
-                                && !TextUtils.isEmpty(password)
-                                && Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-
-                            if (snapshot != null && snapshot.getValue() != null && snapshot.getChildrenCount() > 0) {
-                                Boolean isDuplicated = false;
-                                for (DataSnapshot dataSnapshot: snapshot.getChildren()) {
+                    if (!TextUtils.isEmpty(email)
+                            && !TextUtils.isEmpty(name)
+                            && !TextUtils.isEmpty(password)) {
+                        if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                            if (snapshot.getValue() != null && snapshot.getChildrenCount() > 0) {
+                                boolean isDuplicated = false;
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                     User user = dataSnapshot.getValue(User.class);
                                     if (email.equals(user.getEmail())) {
                                         isDuplicated = true;
                                         break;
                                     }
                                 }
-                                Log.e(TAG, "onDataChange: "+isDuplicated );
                                 if (isDuplicated) {
                                     Toast.makeText(getApplicationContext(),
-                                            "This email's been used, plese choose another email",
+                                            "This email's been used, please choose another one",
                                             Toast.LENGTH_LONG).show();
                                 } else {
                                     String id = databaseReference.push().getKey();
@@ -90,7 +86,8 @@ public class RegisterActivity extends AppCompatActivity {
                                             "Register successfully",
                                             Toast.LENGTH_LONG).show();
                                     Log.e(TAG, "onDataChange: Register successfully");
-                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    Intent intent = new Intent(RegisterActivity.this,
+                                            LoginActivity.class);
                                     intent.putExtra("email", email);
                                     intent.putExtra("pass", password);
                                     setResult(RESULT_OK, intent);
@@ -112,30 +109,30 @@ public class RegisterActivity extends AppCompatActivity {
                                 finish();
                             }
                         } else {
-
                             Toast.makeText(getApplicationContext(),
-                                    "Invalid inputs",
+                                    "Invalid email",
                                     Toast.LENGTH_LONG).show();
-                            Log.e(TAG, "onDataChange: Invalid inputs" );
                         }
-                    }
+                    } else {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e(TAG, "onCancelled: "+error.getMessage() );
-                        v.setBackground(getDrawable(R.drawable.background_button));
-                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(),
+                                "Invalid inputs",
+                                Toast.LENGTH_LONG).show();
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e(TAG, "onCancelled: " + error.getMessage());
+                    v.setBackground(getDrawable(R.drawable.background_button));
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
         });
 
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                btnBack.setTextColor(getColor(R.color.colorPrimaryDark));
-                finish();
-            }
+        btnBack.setOnClickListener(v -> {
+            btnBack.setTextColor(getColor(R.color.colorPrimaryDark));
+            finish();
         });
 
     }

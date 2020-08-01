@@ -1,22 +1,19 @@
 package com.ration4l.nl.weather;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.ration4l.nl.weather.adapter.CurrentWeatherRVAdapter;
-import com.ration4l.nl.weather.model.WeatherResponse;
 import com.ration4l.nl.weather.viewmodel.WeatherViewModel;
 
 import java.util.ArrayList;
@@ -34,6 +31,7 @@ public class CurrentWeatherFragment extends Fragment {
 
     private CurrentWeatherRVAdapter adapter;
     private WeatherViewModel weatherViewModel;
+
     public CurrentWeatherFragment() {
         // Required empty public constructor
     }
@@ -67,15 +65,12 @@ public class CurrentWeatherFragment extends Fragment {
         initComponents(view);
 
         weatherViewModel = new ViewModelProvider(getActivity()).get(WeatherViewModel.class);
-        weatherViewModel.getWeatherLiveData().observe(getActivity(), new Observer<WeatherResponse>() {
-            @Override
-            public void onChanged(WeatherResponse weatherResponse) {
-                listContent.clear();
-                listContent.add(weatherResponse);
-                listContent.add(weatherResponse.getCurrent());
-                adapter.notifyDataSetChanged();
-                Log.e(TAG, "onChanged: "+listContent );
-            }
+        weatherViewModel.getWeatherLiveData().observe(getActivity(), weatherResponse -> {
+            listContent.clear();
+            listContent.add(weatherResponse);
+            listContent.add(weatherResponse.getCurrent());
+            adapter.notifyDataSetChanged();
+            Log.e(TAG, "onChanged: " + listContent);
         });
 
     }

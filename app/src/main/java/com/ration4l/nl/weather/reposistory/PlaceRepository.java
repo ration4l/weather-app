@@ -28,7 +28,7 @@ public class PlaceRepository {
         return allPlaces;
     }
 
-    public void insert(Place place){
+    public void insert(Place place) {
         PlaceRoomDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -37,7 +37,7 @@ public class PlaceRepository {
         });
     }
 
-    public void deletePlace(String placeAddress){
+    public void deletePlace(String placeAddress) {
         PlaceRoomDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {

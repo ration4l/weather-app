@@ -20,7 +20,7 @@ import androidx.annotation.Nullable;
  * Created by ThanhLongNL on 11-Jul-20.
  */
 
-public class GpsTracker extends Service implements LocationListener{
+public class GpsTracker extends Service implements LocationListener {
     private static final String TAG = "GpsTracker";
     private Context context;
     boolean isNetworkEnabled = false;
@@ -34,7 +34,7 @@ public class GpsTracker extends Service implements LocationListener{
     private String provider_info;
 
     public static final int MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; //10m
-    public static final int MIN_TIME_BETWEEN_UPDATES = 1000*60*1; //1 minute
+    public static final int MIN_TIME_BETWEEN_UPDATES = 1000 * 60; //1 minute
 
     protected LocationManager locationManager;
 
@@ -59,7 +59,7 @@ public class GpsTracker extends Service implements LocationListener{
             if (isGPSEnabled) {
                 this.isGPSTrackingEnabled = true;
 
-                Log.d(TAG, "Application use GPS Service");
+                Log.e(TAG, "Application use GPS Service");
 
                 /*
                  * This provider determines location using
@@ -72,7 +72,7 @@ public class GpsTracker extends Service implements LocationListener{
             } else if (isNetworkEnabled) { // Try to get location if you Network Service is enabled
                 this.isGPSTrackingEnabled = true;
 
-                Log.d(TAG, "Application use Network State to get GPS coordinates");
+                Log.e(TAG, "Application use Network State to get GPS coordinates");
 
                 /*
                  * This provider determines location based on
@@ -84,7 +84,7 @@ public class GpsTracker extends Service implements LocationListener{
             }
 
             // Application can use GPS or Network Provider
-            if (provider_info!=null) {
+            if (provider_info != null) {
                 locationManager.requestLocationUpdates(
                         provider_info,
                         MIN_TIME_BETWEEN_UPDATES,
@@ -98,10 +98,7 @@ public class GpsTracker extends Service implements LocationListener{
                     updateGPSCoordinates();
                 }
             }
-        }
-        catch (Exception e)
-        {
-            //e.printStackTrace();
+        } catch (Exception e) {
             Log.e(TAG, "Impossible to connect to LocationManager", e);
         }
     }
@@ -110,53 +107,45 @@ public class GpsTracker extends Service implements LocationListener{
         if (location != null) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-            Log.e(TAG, "updateGPSCoordinates: latlng: " + latitude+", "+longitude );
+            Log.e(TAG, "updateGPSCoordinates: latlng: " + latitude + ", " + longitude);
         }
     }
 
-    public void stopUsingGPS(){
+    public void stopUsingGPS() {
         if (locationManager != null) {
             locationManager.removeUpdates(GpsTracker.this);
         }
     }
 
-    public double getLatitude(){
+    public double getLatitude() {
         if (location != null) {
             latitude = location.getLatitude();
         }
         return latitude;
     }
 
-    public double getLongitude(){
+    public double getLongitude() {
         if (location != null) {
             longitude = location.getLongitude();
         }
         return longitude;
     }
 
-    public boolean canGetLocation(){
+    public boolean canGetLocation() {
         return this.canGetLocation;
     }
 
-    public void showSettingAlert(){
+    public void showSettingAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("Location service is off");
         alertDialog.setMessage("Please turn on device location.");
 
-        alertDialog.setPositiveButton("Go to settings", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                context.startActivity(intent);
-            }
+        alertDialog.setPositiveButton("Go to settings", (dialog, which) -> {
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            context.startActivity(intent);
         });
 
-        alertDialog.setNegativeButton("No, thanks", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+        alertDialog.setNegativeButton("No, thanks", (dialog, which) -> dialog.cancel());
         alertDialog.show();
     }
 
