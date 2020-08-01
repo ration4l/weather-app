@@ -78,6 +78,6 @@ public class SharedPreferencesManager {
 
     public static String getUnit(Context context) {
         return SharedPreferencesManager.getDefaultSharedPreferences(context)
-                .getString(SharedPreferencesManager.KEY_EMAIL, "metric");
+                .getString(SharedPreferencesManager.KEY_UNIT, "metric");
     }
 }
