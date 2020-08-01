@@ -31,7 +31,7 @@ public class PlaceSuggestionResponse {
                 '}';
     }
 
-    public static class Embedded {
+    public class Embedded {
 
         @SerializedName("city:search-results")
         @Expose
@@ -49,7 +49,7 @@ public class PlaceSuggestionResponse {
         }
     }
 
-    public static class Links {
+    public class Links {
 
         @SerializedName("city:item")
         @Expose
@@ -67,7 +67,7 @@ public class PlaceSuggestionResponse {
         }
     }
 
-    public static class CitySearchResult {
+    public class CitySearchResult {
 
         @SerializedName("_links")
         @Expose
@@ -91,7 +91,7 @@ public class PlaceSuggestionResponse {
         }
     }
 
-    public static class CityItem {
+    public class CityItem {
 
         @SerializedName("href")
         @Expose

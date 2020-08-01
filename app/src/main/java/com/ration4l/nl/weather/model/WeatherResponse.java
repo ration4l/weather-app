@@ -1,5 +1,10 @@
 package com.ration4l.nl.weather.model;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -9,13 +14,19 @@ import java.util.List;
  */
 
 public class WeatherResponse {
+    @SerializedName("lat")
     private float lat;
+
+    @ColumnInfo(name = "lon")
     private float lon;
 
+    @SerializedName("current")
     private Current current;
 
+    @SerializedName("hourly")
     private List<Hourly> hourly;
 
+    @SerializedName("daily")
     private List<Daily> daily;
 
     public List<Daily> getDaily() {
@@ -53,7 +64,8 @@ public class WeatherResponse {
      * Created by ThanhLongNL on 10-Jul-20.
      */
 
-    public static class Current {
+    public class Current {
+        @SerializedName("dt")
         private long dt;
 
         @SerializedName("sunrise")
@@ -62,19 +74,28 @@ public class WeatherResponse {
         @SerializedName("sunset")
         private long sunSet;
 
+        @SerializedName("temp")
         private float temp;
 
         @SerializedName("feels_like")
         private float feelLike;
 
+        @SerializedName("humdity")
         private int humidity;
+
+        @SerializedName("uvi")
         private float uvi;
+
+        @SerializedName("clouds")
         private int clouds;
+
+        @SerializedName("visibility")
         private float visibility;
 
         @SerializedName("wind_speed")
         private float windSpeed;
 
+        @SerializedName("weather")
         private List<Weather> weather = null;
 
         public long getDt() {
@@ -143,9 +164,14 @@ public class WeatherResponse {
      * Created by ThanhLongNL on 10-Jul-20.
      */
 
-    public static class Hourly {
+    public class Hourly {
+        @SerializedName("dt")
         private long dt;
+
+        @SerializedName("temp")
         private float temp;
+
+        @SerializedName("weather")
         private List<Weather> weather = null;
 
         public List<Weather> getWeather() {
@@ -175,17 +201,31 @@ public class WeatherResponse {
      * Created by ThanhLongNL on 11-Jul-20.
      */
 
-    public static class Daily {
+    public class Daily {
+        @SerializedName("dt")
         private long dt;
+
+        @SerializedName("sunrise")
         private long sunrise;
+
+        @SerializedName("sunset")
         private long sunset;
+
+        @SerializedName("temp")
         private Temp temp;
+
+        @SerializedName("humidity")
         private int humidity;
 
         @SerializedName("wind_speed")
         private float windSpeed;
+
+        @SerializedName("weather")
         private List<Weather> weather;
+
+        @SerializedName("uvi")
         private float uvi;
+
         private boolean expanded = false;
 
         public void setExpanded(boolean expanded) {
@@ -247,8 +287,11 @@ public class WeatherResponse {
      * Created by ThanhLongNL on 10-Jul-20.
      */
 
-    public static class Weather {
+    public class Weather {
+        @SerializedName("description")
         private String description;
+
+        @SerializedName("icon")
         private String icon;
 
         public String getDescription() {
@@ -272,8 +315,11 @@ public class WeatherResponse {
      * Created by ThanhLongNL on 11-Jul-20.
      */
 
-    public static class Temp {
+    public class Temp {
+        @SerializedName("max")
         private float max;
+
+        @SerializedName("min")
         private float min;
 
         public float getMax() {

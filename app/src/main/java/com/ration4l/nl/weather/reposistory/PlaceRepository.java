@@ -29,10 +29,20 @@ public class PlaceRepository {
     }
 
     public void insert(Place place){
-        PlaceRoomDatabase.databaseWriteExecutor.execute(() -> placeDao.insert(place));
+        PlaceRoomDatabase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                placeDao.insert(place);
+            }
+        });
     }
 
     public void deletePlace(String placeAddress){
-        PlaceRoomDatabase.databaseWriteExecutor.execute(() -> placeDao.deletePlace(placeAddress));
+        PlaceRoomDatabase.databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                placeDao.deletePlace(placeAddress);
+            }
+        });
     }
 }

@@ -61,8 +61,9 @@ public class HourlyWeatherForecastRVAdapter extends RecyclerView.Adapter<HourlyW
         public void setContents(WeatherResponse.Hourly hourly) {
             tvHourlyTemp.setText(Math.round(hourly.getTemp()) +"°");
             tvHourlyTime.setText(milisToHourString(hourly.getDt()));
+            String icon = hourly.getWeather().get(0).getIcon();
             Picasso.with(context)
-                    .load("https://openweathermap.org/img/wn/"+hourly.getWeather().get(0).getIcon()+"@2x.png")
+                    .load("https://openweathermap.org/img/wn/"+icon+"@2x.png")
                     .into(imgHourlyIcon);
         }
     }

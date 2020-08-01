@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -28,6 +29,7 @@ import java.util.List;
 public class PlacesAcitivity extends AppCompatActivity implements PlaceRVAdapter.OnPlaceSelectedListener {
     private static final String TAG = "SearchAcitivity";
     private LinearLayout rootLayout;
+    private Toolbar toolbar;
     private RecyclerView recyclerView;
     private PlaceRVAdapter placeRVAdapter;
     private List<Place> currentPlaceList = new ArrayList<>();
@@ -38,7 +40,15 @@ public class PlacesAcitivity extends AppCompatActivity implements PlaceRVAdapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        toolbar = findViewById(R.id.toolBar_places);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Your locations");
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
 
         rootLayout = findViewById(R.id.layout_root);
 

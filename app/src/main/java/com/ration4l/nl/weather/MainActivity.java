@@ -7,9 +7,12 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,12 +35,17 @@ import com.ration4l.nl.weather.adapter.PlaceAutocompleteAdapter;
 import com.ration4l.nl.weather.adapter.ViewPagerAdapter;
 import com.ration4l.nl.weather.model.Latlng;
 import com.ration4l.nl.weather.model.Place;
+import com.ration4l.nl.weather.utils.SharedPreferencesManager;
 import com.ration4l.nl.weather.viewmodel.PlaceViewModel;
 import com.ration4l.nl.weather.viewmodel.WeatherViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
+import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getEmail;
+import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getUsername;
+import static com.ration4l.nl.weather.utils.Utils.getAddressFromLatLng;
 import static com.ration4l.nl.weather.utils.Utils.getLocationLatLngFromAddress;
 import static com.ration4l.nl.weather.utils.Utils.hideKeyboard;
 
@@ -50,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ViewPager viewPager;
+    private ProgressBar progressBar;
     private SearchView searchView;
     private SearchView.SearchAutoComplete searchAutoComplete;
     private WeatherViewModel weatherViewModel;
@@ -62,8 +71,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        progressBar = findViewById(R.id.progressBar);
         weatherViewModel = new ViewModelProvider(MainActivity.this).get(WeatherViewModel.class);
-        weatherViewModel.init();
+        weatherViewModel.getProgressBarObservable().observe(MainActivity.this, aBoolean -> {
+            if (aBoolean){
+
+                progressBar.setVisibility(View.VISIBLE);
+            } else {
+
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
         placeViewModel = new ViewModelProvider(MainActivity.this).get(PlaceViewModel.class);
         placeViewModel.getAllPlaces().observe(this, places -> {
             currentPlaceList.clear();
@@ -71,16 +90,10 @@ public class MainActivity extends AppCompatActivity {
         });
         setupDrawer();
         setupTabs();
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            Log.e(TAG, "onRefresh: refreshing");
-            fetchData();
-            swipeRefreshLayout.setRefreshing(false);
-        });
-
+        setupSearchview();
         checkGPS();
         fetchData();
-
+//        setupFloatingSearchView();
         /*
          Places.initialize(this, "AIzaSyCA3Atkye7dnmN6OXS7vNC6YJDRkhLty78");
          PlacesClient placesClient = Places.createClient(this);
@@ -101,11 +114,57 @@ public class MainActivity extends AppCompatActivity {
          */
     }
 
+        private void setupSearchview() {
+            searchView = findViewById(R.id.customSearchview);
+            searchAutoComplete = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+            PlaceAutocompleteAdapter placeAutocompleteAdapter = new PlaceAutocompleteAdapter(this, R.layout.item_place_matching_name);
+            searchAutoComplete.setAdapter(placeAutocompleteAdapter);
+            searchAutoComplete.setSelectAllOnFocus(true);
+            searchAutoComplete.setTextColor(getColor(R.color.colorPrimaryText));
+            searchAutoComplete.setHintTextColor(getColor(R.color.colorSecondaryText));
+            ImageView imgClose = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+            imgClose.setImageDrawable(getDrawable(R.drawable.ic_baseline_clear_24));
+            searchAutoComplete.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            searchAutoComplete.setInputType(EditorInfo.TYPE_TEXT_FLAG_AUTO_COMPLETE);
+            searchAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+                String address = parent.getItemAtPosition(position).toString();
+                Latlng latlng = getLocationLatLngFromAddress(getApplicationContext(), address);
+                if (latlng != null) {
+                    weatherViewModel.getWeatherData(latlng.getLat(), latlng.getLng());
+                    searchAutoComplete.setText(parent.getItemAtPosition(position).toString());
+                    Place place = new Place(address, latlng.getLat(), latlng.getLng());
+                    boolean isDuplicated = false;
+                    for (Place p : currentPlaceList
+                    ) {
+                        if (p.getAddress().equalsIgnoreCase(place.getAddress())) {
+                            isDuplicated = true;
+                            break;
+                        }
+                    }
+                    if (!isDuplicated) {
+                        Snackbar.make(drawerLayout, "Add this location to your list?", 10 * 1000)
+                                .setAction("Add", v -> {
+                                    placeViewModel.insert(place);
+                                    Log.e(TAG, "onClick: Added");
+                                })
+                                .show();
+                    }
+                } else {
+                    Snackbar.make(drawerLayout, "Error, try again.", Snackbar.LENGTH_LONG).show();
+                }
+                hideKeyboard(MainActivity.this, view);
+                searchAutoComplete.clearFocus();
+            });
+        }
+
     private void fetchData() {
         Latlng location = getCurrentLocationLatLng();
         Log.e(TAG, "fetchData: latlng: " + location);
         if (location != null) {
             weatherViewModel.getWeatherData(location.getLat(), location.getLng());
+            String address = getAddressFromLatLng(getApplicationContext(), location.getLat(), location.getLng());
+            Log.e(TAG, "fetchData: "+address );
+            searchAutoComplete.setText(address);
         }
     }
 
@@ -129,6 +188,12 @@ public class MainActivity extends AppCompatActivity {
                 ViewPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            Log.e(TAG, "onRefresh: refreshing");
+            fetchData();
+            swipeRefreshLayout.setRefreshing(false);
+        });
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout){
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -140,26 +205,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupDrawer() {
-        Toolbar toolbar = findViewById(R.id.toolBar);
+        Toolbar toolbar = findViewById(R.id.toolBar_main);
         setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
         navigationView = findViewById(R.id.navigationView);
+
+        View navHeader = navigationView.getHeaderView(0);
+        TextView tvName = navHeader.findViewById(R.id.tvNavUsername);
+        TextView tvEmail = navHeader.findViewById(R.id.tvNavEmail);
+        tvName.setText(getUsername(getApplicationContext()));
+        tvEmail.setText(getEmail(getApplicationContext()));
+
+        ImageView imgHeader = navHeader.findViewById(R.id.nav_header_img);
+
+        Calendar calendar = Calendar.getInstance();
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        Log.e(TAG, "setupDrawer: current hour: "+currentHour );
+
+        if (currentHour >= 0 && currentHour < 4) {
+            imgHeader.setImageDrawable(getDrawable(R.drawable.icon_moon_and_stars));
+        } else if (currentHour < 8) {
+            imgHeader.setImageDrawable(getDrawable(R.drawable.icon_sunrise));
+        } else if (currentHour < 12) {
+            imgHeader.setImageDrawable(getDrawable(R.drawable.icon_sun));
+        } else if (currentHour < 18) {
+            imgHeader.setImageDrawable(getDrawable(R.drawable.icon_sun_smiling));
+        } else if (currentHour <= 23) {
+            imgHeader.setImageDrawable(getDrawable(R.drawable.icon_night));
+        }
 
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.action_home:
-                    MainActivity.this.checkGPS();
-                    MainActivity.this.fetchData();
-                    searchAutoComplete.setText("");
+                    checkGPS();
+                    fetchData();
+//                    searchAutoComplete.setText("");
                     drawerLayout.closeDrawer(GravityCompat.START);
                     break;
                 case R.id.action_location_list:
                     Intent placeIntent = new Intent(MainActivity.this, PlacesAcitivity.class);
-                    MainActivity.this.startActivityForResult(placeIntent, PLACE_REQUEST_CODE);
+                    startActivityForResult(placeIntent, PLACE_REQUEST_CODE);
+                    break;
+                case R.id.action_logout:
+                    SharedPreferencesManager.getDefaultSharedPreferences(getApplicationContext())
+                            .edit().putBoolean(SharedPreferencesManager.KEY_LOGIN, false)
+                            .apply();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
                     break;
             }
             return true;
@@ -198,9 +295,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+//        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
 
         MenuItem menuItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) menuItem.getActionView();
@@ -242,18 +340,25 @@ public class MainActivity extends AppCompatActivity {
             searchAutoComplete.clearFocus();
         });
 
+
+
         return true;
     }
 
+ */
+
+/*
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_refresh) {
             checkGPS();
             fetchData();
-            searchAutoComplete.setText("");
+//            searchAutoComplete.setText("");
         }
         return super.onOptionsItemSelected(item);
     }
+
+ */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -265,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
                 if (place != null) {
                     weatherViewModel.getWeatherData(place.getLat(), place.getLng());
                     searchAutoComplete.setText(place.getAddress());
+                    searchAutoComplete.clearFocus();
                 }
             } else {
                 Log.e(TAG, "onActivityResult: null");

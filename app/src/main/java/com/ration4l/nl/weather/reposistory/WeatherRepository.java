@@ -24,6 +24,7 @@ public class WeatherRepository {
     private static WeatherRepository INSTANCE;
     private WeatherAPI weatherAPI;
     private MutableLiveData<WeatherResponse> weatherResponseLiveData;
+    private MutableLiveData<Boolean> progressBarObservable;
 
     public static WeatherRepository getInstance(){
         if (INSTANCE == null) {
@@ -35,9 +36,11 @@ public class WeatherRepository {
     public WeatherRepository(){
         weatherResponseLiveData = new MutableLiveData<>();
         weatherAPI = WeatherRetrofitService.getInstance().create(WeatherAPI.class);
+        progressBarObservable = new MutableLiveData<>();
     }
 
     public void getWeatherData(double lat, double lng){
+        progressBarObservable.setValue(true);
         Map<String, String> options = new HashMap<>();
         options.put("lat", String.valueOf(lat));
         options.put("lon", String.valueOf(lng));
@@ -48,6 +51,7 @@ public class WeatherRepository {
         call.enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
+                progressBarObservable.setValue(false);
                 if (response.isSuccessful()) {
                     weatherResponseLiveData.setValue(response.body());
                 }
@@ -55,6 +59,7 @@ public class WeatherRepository {
 
             @Override
             public void onFailure(Call<WeatherResponse> call, Throwable t) {
+                progressBarObservable.setValue(false);
                 Log.e(TAG, "onFailure: Error calling api" );
             }
         });
@@ -62,5 +67,9 @@ public class WeatherRepository {
 
     public MutableLiveData<WeatherResponse> getWeatherResponseLiveData() {
         return weatherResponseLiveData;
+    }
+
+    public MutableLiveData<Boolean> getProgressBarObservable() {
+        return progressBarObservable;
     }
 }

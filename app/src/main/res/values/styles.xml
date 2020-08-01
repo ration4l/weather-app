@@ -8,13 +8,27 @@
     </style>
 
     <style name="AppTheme.NoActionBar">
-        <item name = "windowActionBar">false</item>
+        <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AutocompleteTextViewStyle">
-        <item name="colorControlNormal" type="color">@color/colorWhite</item>
-        <item name="colorControlActivated" type="color">@color/colorWhite</item>
+    <style name="AppTheme.NoActionBarTransparentStatusBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/colorAccent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AutocompleteTextViewStyle" parent="Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:editTextColor" type="color">@color/colorPrimaryText</item>
+        <item name="android:textColorHint" type="color">@color/colorSecondaryText</item>
+        <item name="android:searchIcon">@drawable/ic_baseline_menu_24</item>
+        <item name="android:searchIcon">@drawable/ic_baseline_menu_24</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
 </resources>

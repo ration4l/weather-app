@@ -2,15 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <group>
-        <item android:title="Home"
+        <item
+            android:title="Home"
+            android:icon="@drawable/ic_baseline_home_24"
             android:id="@+id/action_home"/>
 
-        <item android:title="Your locations"
+        <item
+            android:title="Your locations"
+            android:icon="@drawable/ic_baseline_place_24"
             android:id="@+id/action_location_list"/>
 
     </group>
     <group>
-        <item android:title="Exit"/>
+        <item
+            android:title="Logout"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"
+            android:id="@+id/action_logout"/>
     </group>
 
 </menu>

@@ -11,18 +11,22 @@
 
     <ImageView
         android:id="@+id/nav_header_img"
+        android:layout_gravity="center_horizontal"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher" />
 
     <TextView
+        android:id="@+id/tvNavUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
+        android:paddingTop="4dp"
         android:text="Thanh Long"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
     <TextView
+        android:id="@+id/tvNavEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="thanhlong.fy31@gmail.com" />

@@ -1,7 +1,5 @@
 package com.ration4l.nl.weather.model;
 
-import android.app.Service;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

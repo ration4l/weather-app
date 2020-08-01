@@ -14,11 +14,17 @@ public class WeatherViewModel extends ViewModel {
     private static final String TAG = "SharedViewModel";
     private WeatherRepository weatherRepository;
     private MutableLiveData<WeatherResponse> weatherLiveData;
+    private MutableLiveData<Boolean> progressBarObservable;
 
 
-    public void init(){
+    public WeatherViewModel() {
         weatherRepository = WeatherRepository.getInstance();
         weatherLiveData = weatherRepository.getWeatherResponseLiveData();
+        progressBarObservable = weatherRepository.getProgressBarObservable();
+    }
+
+    public MutableLiveData<Boolean> getProgressBarObservable() {
+        return progressBarObservable;
     }
 
     public void getWeatherData(double lat, double lng){

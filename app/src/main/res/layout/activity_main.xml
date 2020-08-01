@@ -6,11 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.ration4l.nl.weather.MainActivity"
-    android:background="@drawable/back_ground_moss"
+    tools:context=".MainActivity"
     android:clickable="true"
     android:focusableInTouchMode="true"
-    tools:openDrawer="start"
     >
 
     <LinearLayout
@@ -20,21 +18,35 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolBar"
+            android:id="@+id/toolBar_main"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:elevation="4dp"
+            android:background="@color/colorPrimary"
+            android:elevation="8dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             >
+
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/customSearchview"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                app:iconifiedByDefault="false"
+                app:searchIcon="@null"
+                app:queryHint="Search places"
+                android:background="@drawable/shape_background_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
-            app:tabIndicatorColor="@color/colorPrimary"
+            android:elevation="8dp"
+            android:background="@color/colorPrimary"
+            app:tabIndicatorColor="@color/colorWhite"
             app:tabSelectedTextColor="@color/colorWhite"
-            app:tabTextColor="#DAFFDC"
+            app:tabTextColor="@color/colorPrimaryLight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -44,13 +56,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/viewPager"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:visibility="gone"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminateTint="@color/colorPrimaryDark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
     </LinearLayout>
 
@@ -60,6 +89,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_menu" />
+        app:menu="@menu/drawer_menu"
+        android:background="@color/colorWhite"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

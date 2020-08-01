@@ -8,7 +8,7 @@
 
     <TextView
         android:text="Current Details"
-        android:textColor="#000000"
+        android:textColor="@color/colorPrimaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -25,7 +25,7 @@
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/tvWindSpeed"
-                android:textColor="#000000"
+                android:textColor="@color/colorPrimaryText"
                 android:text="Wind speed value"/>
         </TableRow>
 
@@ -38,7 +38,7 @@
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/tvHumidity"
-                android:textColor="#000000"
+                android:textColor="@color/colorPrimaryText"
                 android:text="Humidity value"/>
         </TableRow>
 
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/tvUVIndex"
-                android:textColor="#000000"
+                android:textColor="@color/colorPrimaryText"
                 android:text="UV Index value"/>
         </TableRow>
 
@@ -64,7 +64,7 @@
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/tvVisibility"
-                android:textColor="#000000"
+                android:textColor="@color/colorPrimaryText"
                 android:text="Visibility value"/>
         </TableRow>
 
@@ -77,7 +77,7 @@
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/tvSunrise"
-                android:textColor="#000000"
+                android:textColor="@color/colorPrimaryText"
                 android:text="Sunrise value"/>
         </TableRow>
 
@@ -90,7 +90,7 @@
             <TextView
                 android:layout_weight="1"
                 android:id="@+id/tvSunset"
-                android:textColor="#000000"
+                android:textColor="@color/colorPrimaryText"
                 android:text="Sunset value"/>
         </TableRow>
 
