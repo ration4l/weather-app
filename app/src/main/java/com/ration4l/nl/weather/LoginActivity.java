@@ -2,6 +2,8 @@ package com.ration4l.nl.weather;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,13 +26,14 @@ import static com.ration4l.nl.weather.utils.SharedPreferencesManager.saveEmail;
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.saveLoginState;
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.saveUsername;
 import static com.ration4l.nl.weather.utils.Utils.hideKeyboard;
+import static com.ration4l.nl.weather.utils.Utils.underline;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     public static final int REGISTER_REQUEST_CODE = 999;
 
     private EditText etEmail, etPassword;
-    private Button btnLogin, btnNavRegister;
+    private Button btnLogin, btnNavRegister, btnLoginWithoutAccount;
     private ProgressBar progressBar;
 
     @Override
@@ -41,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnNavRegister = findViewById(R.id.btnNavRegister);
+        btnLoginWithoutAccount = findViewById(R.id.btnLoginWithoutAccount);
+        btnLoginWithoutAccount.setText(underline("Login without account"));
 
         progressBar = findViewById(R.id.loading);
         progressBar.setVisibility(View.GONE);
@@ -67,29 +72,23 @@ public class LoginActivity extends AppCompatActivity {
                             User user = dataSnapshot.getValue(User.class);
                             if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
                                 isSuccessful = true;
-                                saveLoginState(getApplicationContext(), true);
-                                saveUsername(getApplicationContext(), user.getUserName());
-                                saveEmail(getApplicationContext(), user.getEmail());
                                 Toast.makeText(getApplicationContext(),
                                         "Login Successfully",
-                                        Toast.LENGTH_LONG).show();
-
-                                Log.e(TAG, "onDataChange: Login Successfully");
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                finish();
+                                        Toast.LENGTH_SHORT).show();
+                                login(user);
                             }
                         }
                         if (!isSuccessful) {
                             Toast.makeText(getApplicationContext(),
                                     "Invalid email or password.",
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_SHORT).show();
                             Log.e(TAG, "onDataChange: email or password.");
 
                         }
                     } else {
                         Toast.makeText(getApplicationContext(),
                                 "Invalid email or password.",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -106,6 +105,20 @@ public class LoginActivity extends AppCompatActivity {
             v.setBackground(getDrawable(R.drawable.background_sub_button_onpress));
             startActivityForResult(intent, REGISTER_REQUEST_CODE);
         });
+
+        btnLoginWithoutAccount.setOnClickListener(v -> {
+            btnLoginWithoutAccount.setTextColor(getColor(R.color.colorPrimaryDark));
+            login(new User());
+        });
+    }
+
+    private void login(User user) {
+        saveLoginState(getApplicationContext(), true);
+        saveUsername(getApplicationContext(), user.getUserName());
+        saveEmail(getApplicationContext(), user.getEmail());
+        Log.e(TAG, "onDataChange: Login Successfully");
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        finish();
     }
 
     @Override
@@ -130,5 +143,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         btnNavRegister.setBackground(getDrawable(R.drawable.background_sub_button));
+        btnLoginWithoutAccount.setTextColor(getColor(R.color.colorPrimary));
     }
 }

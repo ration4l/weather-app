@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,6 +28,12 @@ import java.util.List;
 
 public class Utils {
     private static final String TAG = "Utils";
+
+    public static SpannableString underline(String text){
+        SpannableString result = new SpannableString(text);
+        result.setSpan(new UnderlineSpan(), 0, text.length(), 0);
+        return result;
+    }
 
     public static String standardizeString(String input) {
         String[] array = input.split(" ");

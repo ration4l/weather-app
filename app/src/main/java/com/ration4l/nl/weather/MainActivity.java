@@ -1,14 +1,17 @@
 package com.ration4l.nl.weather;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -44,10 +47,12 @@ import java.util.List;
 
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getEmail;
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.getUsername;
+import static com.ration4l.nl.weather.utils.SharedPreferencesManager.saveLoginState;
 import static com.ration4l.nl.weather.utils.SharedPreferencesManager.saveUnit;
 import static com.ration4l.nl.weather.utils.Utils.getAddressFromLatLng;
 import static com.ration4l.nl.weather.utils.Utils.getLocationLatLngFromAddress;
 import static com.ration4l.nl.weather.utils.Utils.hideKeyboard;
+import static com.ration4l.nl.weather.utils.Utils.underline;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -226,17 +231,32 @@ public class MainActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.navigationView);
 
         View navHeader = navigationView.getHeaderView(0);
+
         TextView tvName = navHeader.findViewById(R.id.tvNavUsername);
         TextView tvEmail = navHeader.findViewById(R.id.tvNavEmail);
-        tvName.setText(getUsername(getApplicationContext()));
-        tvEmail.setText(getEmail(getApplicationContext()));
+        Button btnNavLogin = navHeader.findViewById(R.id.btnNavLogin);
 
+        getUsername(getApplicationContext());
+        if (!TextUtils.isEmpty(getEmail(getApplicationContext()))
+                && !TextUtils.isEmpty(getUsername(getApplicationContext()))) {
+            tvName.setText(getUsername(getApplicationContext()));
+            tvEmail.setText(getEmail(getApplicationContext()));
+        } else {
+            btnNavLogin.setEnabled(true);
+            btnNavLogin.setText(underline("Tap here to login"));
+            btnNavLogin.setTextColor(getColor(R.color.colorWhite));
+            btnNavLogin.setOnClickListener(v ->{
+                btnNavLogin.setTextColor(getColor(R.color.colorPrimaryLight));
+                logout();
+            });
+        }
+
+
+        // set navigation header image
         ImageView imgHeader = navHeader.findViewById(R.id.nav_header_img);
-
         Calendar calendar = Calendar.getInstance();
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         Log.e(TAG, "setupDrawer: current hour: " + currentHour);
-
         if (currentHour < 4) {
             imgHeader.setImageDrawable(getDrawable(R.drawable.icon_moon_and_stars));
         } else if (currentHour < 8) {
@@ -261,11 +281,8 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(placeIntent, PLACE_REQUEST_CODE);
                     break;
                 case R.id.action_logout:
-                    SharedPreferencesManager.getDefaultSharedPreferences(getApplicationContext())
-                            .edit().putBoolean(SharedPreferencesManager.KEY_LOGIN, false)
-                            .apply();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                    finish();
+                    logout();
+
                 case R.id.action_switch_to_c:
                     weatherViewModel.getUnitObservable().setValue("metric");
                     saveUnit(getApplicationContext(), "metric");
@@ -279,6 +296,12 @@ public class MainActivity extends AppCompatActivity {
             }
             return true;
         });
+    }
+
+    private void logout() {
+        saveLoginState(getApplicationContext(), false);
+        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        finish();
     }
 
     @Nullable

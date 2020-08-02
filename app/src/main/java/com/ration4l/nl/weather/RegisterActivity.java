@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.ration4l.nl.weather.model.User;
 
 import static com.ration4l.nl.weather.utils.Utils.hideKeyboard;
+import static com.ration4l.nl.weather.utils.Utils.underline;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
@@ -39,6 +40,8 @@ public class RegisterActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnReg = findViewById(R.id.btnRegister);
         btnBack = findViewById(R.id.btnBack);
+        btnBack.setText(underline("Back"));
+
         progressBar = findViewById(R.id.loading);
 
         progressBar.setVisibility(View.GONE);
@@ -76,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 if (isDuplicated) {
                                     Toast.makeText(getApplicationContext(),
                                             "This email's been used, please choose another one",
-                                            Toast.LENGTH_LONG).show();
+                                            Toast.LENGTH_SHORT).show();
                                 } else {
                                     String id = databaseReference.push().getKey();
                                     User user = new User(email, password, name, id);
@@ -84,7 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                     Toast.makeText(getApplicationContext(),
                                             "Register successfully",
-                                            Toast.LENGTH_LONG).show();
+                                            Toast.LENGTH_SHORT).show();
                                     Log.e(TAG, "onDataChange: Register successfully");
                                     Intent intent = new Intent(RegisterActivity.this,
                                             LoginActivity.class);
@@ -99,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 databaseReference.child(id).setValue(user);
                                 Toast.makeText(getApplicationContext(),
                                         "Register successfully",
-                                        Toast.LENGTH_LONG).show();
+                                        Toast.LENGTH_SHORT).show();
 
                                 Log.e(TAG, "onDataChange: Register successfully");
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -111,13 +114,13 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(getApplicationContext(),
                                     "Invalid email",
-                                    Toast.LENGTH_LONG).show();
+                                    Toast.LENGTH_SHORT).show();
                         }
                     } else {
 
                         Toast.makeText(getApplicationContext(),
                                 "Invalid inputs",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
 
